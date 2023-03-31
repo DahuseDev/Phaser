@@ -1,0 +1,34 @@
+{
+    "frames": [
+        {
+            "filename": "tank",
+            "frame": {
+                "w": 512,
+                "h": 512,
+                "x": 30,
+                "y": 30
+            },
+            "anchor": {
+                "x": 0.5,
+                "y": 0.5
+            }
+        },
+        {
+            "filename": "turret",
+            "frame": {
+                "w": 1920,
+                "h": 1080,
+                "x": 30,
+                "y": 602
+            },
+            "anchor": {
+                "x": 0.5,
+                "y": 0.5
+            }
+        }
+    ],
+    "meta": {
+        "description": "Atlas generado con Atlas Packer Gamma V2",
+        "web": "https://gammafp.github.io/atlas-packer-phaser/"
+    }
+}
