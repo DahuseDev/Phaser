@@ -8,7 +8,7 @@ class Bullet extends Phaser.GameObjects.Image{
     }
     update(time, delta)
     {
-        if(!this.range.contains(this.x,this.y)){
+        if(!this.range.contains(this.x,this.y) || this.enemy.visible == false){
             this.setActive(false);
             this.setVisible(false);
         }
@@ -20,7 +20,7 @@ class Bullet extends Phaser.GameObjects.Image{
         this.y += this.dy * (this.speed * delta);
     }
     fire(x, y, angle,enemy)
-    {   
+    {   this.enemy = enemy
         this.setActive(true);
         this.setVisible(true);
         this.setPosition(x, y);

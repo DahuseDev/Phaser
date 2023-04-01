@@ -18,7 +18,7 @@ class Turret extends Phaser.GameObjects.Image{
     update(time, delta)
     {   
         let enemy = getEnemy();
-        if(enemy){
+        if(enemy && this.circle.contains(enemy.x,enemy.y)){
             let angle = Phaser.Math.Angle.Between(this.x, this.y, enemy.x, enemy.y);
             this.angle = (angle + Math.PI/2) * Phaser.Math.RAD_TO_DEG;
         }
@@ -28,7 +28,7 @@ class Turret extends Phaser.GameObjects.Image{
         }
     }
     fire(enemy) {
-        if(enemy) {
+        if(enemy && this.circle.contains(enemy.x,enemy.y)) {
             addBullet(this.x, this.y, this.angle,enemy,this.circle);
         }
     }
