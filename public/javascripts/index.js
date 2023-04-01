@@ -14,6 +14,8 @@ let config = {
 
 let game = new Phaser.Game(config);
 
+let ronda = 1;
+
 function preload ()
 {
     this.load.atlas('sprites', 'sprite/sprite.png', 'sprite/sprite_atlas.json');    
@@ -47,10 +49,11 @@ function create ()
 
 }
 function update(time, delta) {  
+    
     // if its time for the next enemy
-    if (time > this.nextEnemy && ENEMY_NUMBER>0)
+    if (time > this.nextEnemy && rounds[ronda]['turret'])
     {        
-        ENEMY_NUMBER--;
+        rounds[ronda]['turret']--;
         let enemy = new Enemy(game.scene.scenes[0])
         enemies.add(enemy,true);
         
@@ -59,6 +62,12 @@ function update(time, delta) {
         enemy.startOnPath();
         
         this.nextEnemy = time + ENEMY_SPAWN_COOLDOWN;     
+    }
+    if(rounds[ronda]['turret']==0 && enemies.countActive() == 0){
+        console.log("aa")
+        ronda++;
+        enemies.clear(true,true)
+        this.nextEnemy = time + 5000;
     }
 }
 
