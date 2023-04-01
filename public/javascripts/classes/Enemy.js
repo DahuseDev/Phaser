@@ -18,8 +18,6 @@ class Enemy extends Phaser.GameObjects.Image{
         this.angle = (angle + Math.PI/2) * Phaser.Math.RAD_TO_DEG;
         // update enemy x and y to the newly obtained x and y
         this.setPosition(this.follower.vec.x, this.follower.vec.y);
-        
-        console.log(angle)
         // if we have reached the end of the path, remove the enemy
         if (this.follower.t >= 1)
         {   

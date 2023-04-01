@@ -25,6 +25,7 @@ function preload ()
 function create ()
 {
     let graphics = this.add.graphics();    
+    
     drawGrid(graphics);
 
     // the path for our enemies

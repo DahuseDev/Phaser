@@ -26,10 +26,11 @@ function placeTurret(pointer) {
 function canPlaceTurret(i, j) {
     return map[i][j] === 0;
 }
-function addBullet(x, y, angle,enemy) {
+function addBullet(x, y, angle,enemy,range) {
     let bullet = bullets.get();
     if (bullet)
     {
+        bullet.range = range;
         bullet.fire(x, y, angle,enemy);
     }
 }

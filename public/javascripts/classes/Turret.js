@@ -3,12 +3,17 @@ class Turret extends Phaser.GameObjects.Image{
     {
         super(scene,0, 0, 'turret')
         this.nextTic = 0;
+        console.log(this)
+        this.graphics = new Phaser.GameObjects.Graphics(scene)
+        console.log(this.graphics)
     }
     // we will place the turret according to the grid
     place(i, j) {            
         this.y = i * 64 + 64/2;
         this.x = j * 64 + 64/2;
-        map[i][j] = 1;            
+        map[i][j] = 1;
+        this.circle = new Phaser.Geom.Circle(this.x, this.y, TURRET_RANGE)     
+        this.graphics.fillCircleShape(this.circle);
     }
     update(time, delta)
     {   
@@ -24,8 +29,7 @@ class Turret extends Phaser.GameObjects.Image{
     }
     fire(enemy) {
         if(enemy) {
-            addBullet(this.x, this.y, this.angle,enemy);
-            
+            addBullet(this.x, this.y, this.angle,enemy,this.circle);
         }
     }
 }
