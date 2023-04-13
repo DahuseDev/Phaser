@@ -49,25 +49,37 @@ function create ()
 
 }
 function update(time, delta) {  
-    
+    rondaActual = rounds[ronda]
+    tank = rondaActual['tank']
+    tankRed = rondaActual['tankRed']
     // if its time for the next enemy
-    if (time > this.nextEnemy && rounds[ronda]['turret'])
+    if (time > this.nextEnemy && (tank || tankRed))
     {        
-        rounds[ronda]['turret']--;
-        let enemy = new Enemy(game.scene.scenes[0])
+        let type;
+        if(tank){
+            type = 'tank';
+            rounds[ronda]['tank']--;
+        }else if(tankRed){
+            type = 'tankRed';
+            rounds[ronda]['tankRed']--;
+        }
+        let enemy = new Enemy(game.scene.scenes[0],type)
+        console.log(enemy)
         enemies.add(enemy,true);
-        
         
         // place the enemy at the start of the path
         enemy.startOnPath();
         
         this.nextEnemy = time + ENEMY_SPAWN_COOLDOWN;     
     }
-    if(rounds[ronda]['turret']==0 && enemies.countActive() == 0){
+    if(tank==0 && enemies.countActive() == 0){
         console.log("aa")
+        
+        console.log(ronda)
         ronda++;
+
         enemies.clear(true,true)
-        this.nextEnemy = time + 5000;
+        this.nextEnemy = time + 1000;
     }
 }
 

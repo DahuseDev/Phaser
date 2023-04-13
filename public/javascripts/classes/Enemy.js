@@ -1,7 +1,9 @@
 class Enemy extends Phaser.GameObjects.Image{
-    constructor (scene)
+    constructor (scene,type)
     {
-        super(scene,0, 0, 'sprites','tank')
+        super(scene,0, 0, 'sprites',type)
+        this.type = type;
+        this.stats = enemyStats[this.type];
         // Phaser.GameObjects.Image.call(this, scene, 0, 0, 'sprites', 'tank');
         this.follower = { t: 0, vec: new Phaser.Math.Vector2() };
         this.displayHeight=100;
@@ -10,7 +12,7 @@ class Enemy extends Phaser.GameObjects.Image{
     update(time, delta)
     {
         // move the t point along the path, 0 is the start and 0 is the end
-        this.follower.t += ENEMY_SPEED * delta;
+        this.follower.t += ENEMY_SPEED * delta * this.stats.speed;
         
         // get the new x and y coordinates in vec
         path.getPoint(this.follower.t, this.follower.vec);
@@ -35,7 +37,7 @@ class Enemy extends Phaser.GameObjects.Image{
         
         // set the x and y of our enemy to the received from the previous step
         this.setPosition(this.follower.vec.x, this.follower.vec.y);
-        this.hp = 100;
+        this.hp = this.stats.hp;
     }
     receiveDamage(damage) {
         this.hp -= damage;           
