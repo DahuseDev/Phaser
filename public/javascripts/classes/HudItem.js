@@ -9,6 +9,7 @@ class HudItem extends Phaser.GameObjects.Image {
         scene.input.setDraggable(this)
         this.setPosition(x, y);
         this.displayHeight=100;
+        
     }
     reset(){
         this.setPosition(this.start[0],this.start[1])

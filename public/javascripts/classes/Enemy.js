@@ -2,8 +2,8 @@ class Enemy extends Phaser.GameObjects.Image{
     constructor (scene,type)
     {
         super(scene,0, 0, 'sprites',type)
-        this.type = type;
-        this.stats = enemyStats[this.type];
+        this.stats = enemyStats[type];
+        this.depth = 3
         // Phaser.GameObjects.Image.call(this, scene, 0, 0, 'sprites', 'tank');
         this.follower = { t: 0, vec: new Phaser.Math.Vector2() };
         this.displayHeight=100;

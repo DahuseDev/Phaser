@@ -24,11 +24,36 @@ function generarHud(graphics){
 
     // console.log(r1)
     graphics.fillStyle(0xFF0000);
-    graphics.lineStyle(3, "#FFFFFF", 1)
+    graphics.lineStyle(1, "#FFFFFF", 1)
     graphics.fillRect(460, 880, 1000, 400);
     graphics.strokeRect(460, 880, 1000, 400);
     // Draw a rectangle
-     
+    
+    //arma 1 
+    graphics.fillStyle(0x686868);
+    graphics.lineStyle(1, "#014346", 1 );
+    graphics.fillRect(500, 940, 200, 120);
+    graphics.strokeRect(460, 880, 1000, 400);
+
+
+    //arma 2 
+
+    graphics.fillStyle(0x686868);
+    graphics.lineStyle(1, "#014346", 1 );
+    graphics.fillRect(600, 940, 200, 120)
+    console.log(graphics)
+    // arma 3
+        // graphics.fillStyle(0x686868);
+        // graphics.lineStyle(1, "#014346", 1 )
+        // graphics.fillRect(700, 940, 200, 120)
+        
+
+        // // arma 4 
+        // graphics.fillStyle(0x686868);
+        // graphics.lineStyle(1, "#014346", 1 )
+        // graphics.fillRect(800, 940, 200, 120)
+
+
     // this.add.square(200,200,148,148,0x6666ff); 
 
 }

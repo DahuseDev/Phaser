@@ -22,7 +22,7 @@ let config = {
 let game = new Phaser.Game(config);
 let money = new Money(START_MONEY);
 let ronda = 1;
-
+let focus = new Focus();
 function preload ()
 {
     this.load.atlas('sprites', 'sprite/sprite.png', 'sprite/sprite_atlas.json');    
@@ -75,18 +75,30 @@ function create ()
     this.input.on('dragend', (pointer, gameObject, dragX, dragY) =>
     {
         gameObject.reset()
-        placeTurret(pointer,gameObject.type,this,turrets)
         try{
-            
+            placeTurret(pointer,gameObject.type,this,turrets)
         }catch{
 
         }
     });
-    // if (turret)
-    // {
-    //     turret.setActive(true);
-    //     turret.setVisible(true);
-    // }
+    this.input.on('pointerdown', (pointer, gameObject) =>
+    {
+        if(gameObject[0] == undefined || gameObject[0].type != "Turret"){
+            focus.clearTarget()
+            
+        }else{
+            focus.newTarget(gameObject[0])
+        }
+        // try{
+        // if(gameObject[0].type === "Turret"){
+        //     console.log("aa")
+            
+        // }else{
+            
+        // }}catch{
+
+        // }
+    });
 
     
 }
