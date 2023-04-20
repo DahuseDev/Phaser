@@ -109,6 +109,7 @@ let turretStats = {
 let rounds = 
 {
     1:{
+        'tankred':1,
         'tank':3
     },
 

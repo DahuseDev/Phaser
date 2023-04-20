@@ -90,7 +90,7 @@ function addBullet(x, y, angle,enemy,range,damage) {
     }
 }
 function getEnemy(range) {
-    let enemyUnits = enemies.getChildren()
+    let enemyUnits = enemies.getChildren().sort((a,b)=>b.follower.t-a.follower.t)
     for(let i = 0; i < enemyUnits.length; i++) {
         let enemy = enemyUnits[i]
         if(enemy.active && range.contains(enemy.x,enemy.y)){
