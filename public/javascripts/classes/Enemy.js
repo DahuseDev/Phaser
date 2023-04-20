@@ -44,6 +44,7 @@ class Enemy extends Phaser.GameObjects.Image{
         
         // if hp drops below 0 we deactivate this enemy
         if(this.hp <= 0) {
+            money.add(this.stats.points)
             this.setActive(false);
             this.setVisible(false);      
         }

@@ -1,7 +1,14 @@
 let config = {
     type: Phaser.AUTO,
-    width: window.innerWidth,
-    height: window.innerHeight,
+    scale: {
+        mode: Phaser.Scale.FIT,
+        parent: 'phaser-example',
+        autoCenter: Phaser.Scale.CENTER_BOTH,
+        width: 1920,
+        height: 1080
+    },
+    // width: window.innerWidth,
+    // height: window.innerHeight,
     physics: {
         default: 'arcade'
     },
@@ -13,7 +20,7 @@ let config = {
 };
 
 let game = new Phaser.Game(config);
-
+let money = new Money(START_MONEY);
 let ronda = 1;
 
 function preload ()
@@ -22,6 +29,7 @@ function preload ()
     this.load.image('bullet', 'images/bullet.png');
     this.load.image('enemy','images/tank.png')
     this.load.image('turret', 'images/turret.png'); 
+    
 }
 
 function create ()
@@ -32,10 +40,18 @@ function create ()
 
     // the path for our enemies
     // parameters are the start x and y of our path
-    path = this.add.path(96, -32);
-    path.lineTo(96, 164);
-    path.lineTo(480, 164);
-    path.lineTo(480, 544);
+    path = this.add.path((0*60), (2*60)+30);
+    path.lineTo((5*60)+30, (2*60)+30);
+    path.lineTo((5*60)+30, (5*60)+30);
+    path.lineTo((9*60)+30, (5*60)+30);
+    path.lineTo((9*60)+30, (2*60)+30);
+    path.lineTo((29*60)+30, (2*60)+30);
+    path.lineTo((29*60)+30, (11*60)+30);
+    path.lineTo((23*60)+30, (11*60)+30);
+    path.lineTo((23*60)+30, (5*60)+30);
+    path.lineTo((19*60)+30, (5*60)+30);
+    path.lineTo((19*60)+30, (11*60)+30);
+    path.lineTo((0*60), (11*60)+30);
 
     graphics.lineStyle(3, 0xffffff, 1);
     // visualize the path
@@ -43,28 +59,46 @@ function create ()
     enemies = this.physics.add.group({ classType: Enemy, runChildUpdate: true });
     this.nextEnemy = 0;
     turrets = this.add.group({ classType: Turret, runChildUpdate: true });
-    this.input.on('pointerdown', placeTurret);
+    // this.input.on('pointerdown', placeTurret);
     bullets = this.physics.add.group({ classType: Bullet, runChildUpdate: true });
+    HudItems = this.physics.add.group({ classType: HudItem, runChildUpdate: true });
     this.physics.add.overlap(enemies, bullets, damageEnemy);
+    generarHud(graphics); 
 
+    HudItems.add(new HudItem(this,900, 1000,'turret') ,true)
+    HudItems.add(new HudItem(this,1000, 1000,'cannon') ,true)
+    this.input.on('drag', (pointer, gameObject, dragX, dragY) =>
+    {
+        gameObject.x = dragX;
+        gameObject.y = dragY;
+    });
+    this.input.on('dragend', (pointer, gameObject, dragX, dragY) =>
+    {
+        gameObject.reset()
+        placeTurret(pointer,gameObject.type,this,turrets)
+        try{
+            
+        }catch{
+
+        }
+    });
+    // if (turret)
+    // {
+    //     turret.setActive(true);
+    //     turret.setVisible(true);
+    // }
+
+    
 }
+
 function update(time, delta) {  
     rondaActual = rounds[ronda]
-    tank = rondaActual['tank']
-    tankRed = rondaActual['tankRed']
     // if its time for the next enemy
-    if (time > this.nextEnemy && (tank || tankRed))
+    if (time > this.nextEnemy && hasEnemy(rondaActual))
     {        
-        let type;
-        if(tank){
-            type = 'tank';
-            rounds[ronda]['tank']--;
-        }else if(tankRed){
-            type = 'tankRed';
-            rounds[ronda]['tankRed']--;
-        }
+        let type = nextEnemy(rondaActual);
+        rounds[ronda][type]--
         let enemy = new Enemy(game.scene.scenes[0],type)
-        console.log(enemy)
         enemies.add(enemy,true);
         
         // place the enemy at the start of the path
@@ -72,12 +106,8 @@ function update(time, delta) {
         
         this.nextEnemy = time + ENEMY_SPAWN_COOLDOWN;     
     }
-    if(tank==0 && enemies.countActive() == 0){
-        console.log("aa")
-        
-        console.log(ronda)
+    if(!hasEnemy(rondaActual) && enemies.countActive() == 0){
         ronda++;
-
         enemies.clear(true,true)
         this.nextEnemy = time + 1000;
     }

@@ -1,7 +1,7 @@
 class Bullet extends Phaser.GameObjects.Image{
     constructor(scene)
     {
-        super(scene,0, 0, 'bullet')
+        super(scene,0, 0, 'sprites','bullet')
         this.dx = 0;
         this.dy = 0;
         this.speed = Phaser.Math.GetSpeed(BULLET_SPEED, 1);
