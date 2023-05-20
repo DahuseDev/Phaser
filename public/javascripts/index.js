@@ -20,14 +20,14 @@ let config = {
 };
 
 let game = new Phaser.Game(config);
-let money = new Money(START_MONEY);
-let health = new Health();
+let player = new Player(START_MONEY); 
 let ronda = 1;
 let focus = new Focus();
 function preload ()
 {
     this.load.atlas('sprites', 'sprite/sprite.png', 'sprite/sprite_atlas.json'); 
     this.load.image('wall', 'images/hud-texture-wall.png'); 
+    this.load.image('background', 'images/background.png');
     
 }
 
@@ -35,22 +35,38 @@ function create ()
 {
     let graphics = this.add.graphics();    
     let scene = game.scene.scenes[0];
+    let bg = this.add.image(800, 590, 'background');
+    // graphics.depth=100
+    bg.displayWidth=1600;
+    bg.displayHeight = 980;
     drawGrid(graphics);
 
     // the path for our enemies
     // parameters are the start x and y of our path
-    path = this.add.path((0*60), (2*60)+30);
-    path.lineTo((5*60)+30, (2*60)+30);
-    path.lineTo((5*60)+30, (5*60)+30);
-    path.lineTo((9*60)+30, (5*60)+30);
-    path.lineTo((9*60)+30, (2*60)+30);
-    path.lineTo((29*60)+30, (2*60)+30);
-    path.lineTo((29*60)+30, (11*60)+30);
-    path.lineTo((23*60)+30, (11*60)+30);
-    path.lineTo((23*60)+30, (5*60)+30);
-    path.lineTo((19*60)+30, (5*60)+30);
-    path.lineTo((19*60)+30, (11*60)+30);
-    path.lineTo((0*60), (11*60)+30);
+    path = this.add.path((0*30), (17*30));
+    path.lineTo((26*30)+15, (17*30));
+    path.lineTo((26*30)+15, (10*30)+15);
+    path.lineTo((25*30)+15, (9*30)+15);
+    path.lineTo((18*30)+15, (9*30)+15);
+    path.lineTo((17*30)+15, (10*30)+15);
+    path.lineTo((17*30)+15, (27*30)+15);
+    path.lineTo((15*30)+15, (29*30)+15);
+    path.lineTo((10*30)+15, (29*30)+15);
+    path.lineTo((8*30)+15, (27*30)+15);
+    path.lineTo((8*30)+15, (23*30)+15);
+    path.lineTo((9*30)+15, (22*30)+15);
+    path.lineTo((31*30)+15, (22*30)+15);
+    path.lineTo((33*30)+15, (20*30)+15);
+    path.lineTo((33*30)+15, (15*30)+15);
+    path.lineTo((34*30)+15, (14*30)+15);
+    path.lineTo((39*30)+15, (14*30)+15);
+    path.lineTo((40*30)+15, (15*30)+15);
+    path.lineTo((40*30)+15, (24*30)+15);
+    path.lineTo((38*30)+15, (27*30));
+    path.lineTo((25*30)+15, (27*30));
+    path.lineTo((23*30)+15, (29*30));
+    path.lineTo((23*30)+15, (36*30));
+    
 
     graphics.lineStyle(3, 0xffffff, 1);
     // visualize the path
@@ -111,11 +127,11 @@ function create ()
 function update(time, delta) {  
     let scene = game.scene.scenes[0];
     rondaActual = rounds[ronda]
-    moneyText.text = "Money: "+money.value;
-    healthText.text = "HP: "+health.value;
+    moneyText.text = "Diners: "+player.money;
+    // healthText.text = "HP: "+health.value;
     
     // if its time for the next enemy
-    if (time > this.nextEnemy && hasEnemy(rondaActual) && health.checkAlive())
+    if (time > this.nextEnemy && hasEnemy(rondaActual) && player.checkAlive())
     {        
         let type = nextEnemy(rondaActual);
         rounds[ronda][type]--
@@ -127,7 +143,7 @@ function update(time, delta) {
         
         this.nextEnemy = time + ENEMY_SPAWN_COOLDOWN;     
     }
-    if(!hasEnemy(rondaActual) && enemies.countActive() == 0  && health.checkAlive()){
+    if(!hasEnemy(rondaActual) && enemies.countActive() == 0  && player.checkAlive()){
         ronda++;
         enemies.clear(true,true)
         this.nextEnemy = time + 1000;
@@ -139,9 +155,9 @@ function update(time, delta) {
     this.healthBar.fillStyle(0x141414);
     this.healthBar.fillRect(0, 0, 1920-300, 100);
     this.healthBar.fillStyle(0xFF0000);
-    this.healthBar.fillRect(0, 0, ( health.value/100) * ( 1920-300), 100);
+    this.healthBar.fillRect(0, 0, ( player.health/100) * ( 1920-300), 100);
 
-    if(!health.checkAlive()){
+    if(!player.checkAlive()){
         finishGame();
     }
 }

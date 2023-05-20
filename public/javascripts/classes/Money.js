@@ -1,5 +1,5 @@
 class Money{
-    value = 0;
+    value = 10000;
     constructor(startingMoney){
         this.value+=startingMoney;
     }
@@ -7,7 +7,6 @@ class Money{
         this.value+=quantity;
     }
     pay(quantity){
-        console.log(this.value)
         if(this.value-quantity<0){
             return null;
         }

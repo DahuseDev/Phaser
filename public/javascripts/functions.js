@@ -1,12 +1,13 @@
 function drawGrid(graphics) {
+
     graphics.lineStyle(1, 0x0000ff, 0.8);
-    for(let i = 0; i < 18; i++) {
-        graphics.moveTo(0, i * 60);
-        graphics.lineTo(1920, i * 60);
+    for(let i = 0; i < 37; i++) {
+        graphics.moveTo(0, i * 30);
+        graphics.lineTo(1600, i * 30);
     }
-    for(let j = 0; j < 32; j++) {
-        graphics.moveTo(j * 60, 0);
-        graphics.lineTo(j * 60, 1080);
+    for(let j = 0; j < 54; j++) {
+        graphics.moveTo(j * 30, 100);
+        graphics.lineTo(j * 30, 1080);
     }
     graphics.strokePath();
 }
@@ -32,26 +33,29 @@ function generarHud(graphics){
 
 
     // Mostra els diners
-    this.moneyText = scene.add.text(1920, 0);
-    moneyText.text = "Money: "+money.value;
-    moneyText.setFont("20px Arial")
-    moneyText.setColor('#ffffff');
+    this.moneyText = scene.add.text(1667, 980);
+    moneyText.depth=15;
+    moneyText.setFont("30px Arial")
+    moneyText.setColor('#000000');
 
     // Mostra la vida
-    this.healthText = scene.add.text(0, 0);
-    healthText.text = "HP: "+health.value ;
-    healthText.setFont("20px Arial")
-    healthText.setColor('#ffffff');
+    // this.healthText = scene.add.text(0, 0);
+    // healthText.text = "HP: "+health.value ;
+    // healthText.setFont("20px Arial")
+    // healthText.setColor('#ffffff');
 
 }
 
 
 function placeTurret(pointer,type,scene,turrets) {
-    let i = Math.floor(pointer.y/60);
-    let j = Math.floor(pointer.x/60);
+    let i = Math.floor(pointer.y/30);
+    let j = Math.floor(pointer.x/30);
+    console.log(i)
+    console.log(j)
+    console.log(canPlaceTurret(i, j))
     if(canPlaceTurret(i, j)) {
         let turret = new Turret(scene,type);
-        if(money.pay(turret.stats.price) == null){
+        if(player.pay(turret.stats.price) == null){
             console.log("Can't afford")
             return;
         }
@@ -123,4 +127,5 @@ function finishGame(){
     endText.text = "";
     endText.setFont("100px Arial")
     endText.setColor('#ffffff');
+
 }

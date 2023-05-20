@@ -14,19 +14,17 @@ class Enemy extends Phaser.GameObjects.Image{
     }
     update(time, delta)
     {
-        // move the t point along the path, 0 is the start and 0 is the end
         this.follower.t += ENEMY_SPEED * delta * this.stats.speed;
-        // get the new x and y coordinates in vec
         path.getPoint(this.follower.t, this.follower.vec);
         let angle = Phaser.Math.Angle.Between(this.x, this.y, this.follower.vec.x, this.follower.vec.y);
         this.angle = (angle + Math.PI/2) * Phaser.Math.RAD_TO_DEG;
-        // update enemy x and y to the newly obtained x and y
         this.setPosition(this.follower.vec.x, this.follower.vec.y);
-        // if we have reached the end of the path, remove the enemy
+
+        // Quan l'enemic arriba al final del camí
         if (this.follower.t >= 1)
         {   
             this.die()
-            health.decrease(this.stats.dmg)
+            player.decrease(this.stats.dmg)
         }
 
         if(this.hp<this.stats.hp && this.follower.t<1){
@@ -49,7 +47,7 @@ class Enemy extends Phaser.GameObjects.Image{
         // get x and y of the given t point            
         path.getPoint(this.follower.t, this.follower.vec);
         
-        // set the x and y of our enemy to the received from the previous step
+        // Estableix la posició d'aquest enemic al principi del camí
         this.setPosition(this.follower.vec.x, this.follower.vec.y);
         this.hp = this.stats.hp;
     }
@@ -60,11 +58,10 @@ class Enemy extends Phaser.GameObjects.Image{
         if(this.hp <= 0) 
         {
             this.die()
-            money.add(this.stats.points)
+            player.add(this.stats.points)
         }
     }
     die(){
-        console.log("reset")
         this.healtBar.setVisible(false)
         this.healtBar.setActive(false)
         this.setActive(false);
