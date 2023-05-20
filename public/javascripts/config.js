@@ -77,17 +77,20 @@ let enemyStats = {
     'tank':{
         'speed':1,
         'hp':100,
-        'points':50
+        'points':50,
+        'dmg':5
     },
     'tankred':{
         'speed':0.6,
         'hp':250,
-        'points':150
+        'points':150,
+        'dmg':20
     },
     'tankyellow':{
         'speed':3,
         'hp':200,
-        'points':100
+        'points':100,
+        'dmg':10
     }
 }
 
@@ -109,6 +112,7 @@ let turretStats = {
 let rounds = 
 {
     1:{
+        'tankyellow':2,
         'tankred':1,
         'tank':3
     },

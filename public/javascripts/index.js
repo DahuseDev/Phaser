@@ -21,21 +21,20 @@ let config = {
 
 let game = new Phaser.Game(config);
 let money = new Money(START_MONEY);
+let health = new Health();
 let ronda = 1;
 let focus = new Focus();
 function preload ()
 {
-    this.load.atlas('sprites', 'sprite/sprite.png', 'sprite/sprite_atlas.json');    
-    this.load.image('bullet', 'images/bullet.png');
-    this.load.image('enemy','images/tank.png')
-    this.load.image('turret', 'images/turret.png'); 
+    this.load.atlas('sprites', 'sprite/sprite.png', 'sprite/sprite_atlas.json'); 
+    this.load.image('wall', 'images/hud-texture-wall.png'); 
     
 }
 
 function create ()
 {
     let graphics = this.add.graphics();    
-    
+    let scene = game.scene.scenes[0];
     drawGrid(graphics);
 
     // the path for our enemies
@@ -62,11 +61,14 @@ function create ()
     // this.input.on('pointerdown', placeTurret);
     bullets = this.physics.add.group({ classType: Bullet, runChildUpdate: true });
     HudItems = this.physics.add.group({ classType: HudItem, runChildUpdate: true });
-    this.physics.add.overlap(enemies, bullets, damageEnemy);
-    generarHud(graphics); 
+    HudStructures = this.physics.add.group({ classType: HudStructure, runChildUpdate: true });
 
-    HudItems.add(new HudItem(this,900, 1000,'turret') ,true)
-    HudItems.add(new HudItem(this,1000, 1000,'cannon') ,true)
+    //Colisio bala - enemic
+    this.physics.add.overlap(enemies, bullets, damageEnemy);
+
+    generarHud(this.add.graphics()); 
+
+    
     this.input.on('drag', (pointer, gameObject, dragX, dragY) =>
     {
         gameObject.x = dragX;
@@ -100,17 +102,24 @@ function create ()
         // }
     });
 
+    this.healthBar = scene.add.graphics();
+    this.healthBar.fillStyle(0x141414);
+    this.healthBar.fillRect(0, 0, 1920-300, 100);
     
 }
 
 function update(time, delta) {  
+    let scene = game.scene.scenes[0];
     rondaActual = rounds[ronda]
+    moneyText.text = "Money: "+money.value;
+    healthText.text = "HP: "+health.value;
+    
     // if its time for the next enemy
-    if (time > this.nextEnemy && hasEnemy(rondaActual))
+    if (time > this.nextEnemy && hasEnemy(rondaActual) && health.checkAlive())
     {        
         let type = nextEnemy(rondaActual);
         rounds[ronda][type]--
-        let enemy = new Enemy(game.scene.scenes[0],type)
+        let enemy = new Enemy(scene,type)
         enemies.add(enemy,true);
         
         // place the enemy at the start of the path
@@ -118,10 +127,22 @@ function update(time, delta) {
         
         this.nextEnemy = time + ENEMY_SPAWN_COOLDOWN;     
     }
-    if(!hasEnemy(rondaActual) && enemies.countActive() == 0){
+    if(!hasEnemy(rondaActual) && enemies.countActive() == 0  && health.checkAlive()){
         ronda++;
         enemies.clear(true,true)
         this.nextEnemy = time + 1000;
+    }
+
+    this.healthBar.setActive(false);
+    this.healthBar.setVisible(false);
+    this.healthBar = scene.add.graphics();
+    this.healthBar.fillStyle(0x141414);
+    this.healthBar.fillRect(0, 0, 1920-300, 100);
+    this.healthBar.fillStyle(0xFF0000);
+    this.healthBar.fillRect(0, 0, ( health.value/100) * ( 1920-300), 100);
+
+    if(!health.checkAlive()){
+        finishGame();
     }
 }
 

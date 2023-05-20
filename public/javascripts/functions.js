@@ -19,42 +19,29 @@ function coords(event){
 
 
 function generarHud(graphics){
-    // const r1 = new Phaser.GameObjects.Rectangle(game.scene.scenes[0], 500,500,300,100,'red',1);
-    // game.scene.scenes[0].
+    let scene = game.scene.scenes[0];
 
-    // console.log(r1)
-    graphics.fillStyle(0xFF0000);
-    graphics.lineStyle(1, "#FFFFFF", 1)
-    graphics.fillRect(460, 880, 1000, 400);
-    graphics.strokeRect(460, 880, 1000, 400);
-    // Draw a rectangle
-    
-    //arma 1 
-    graphics.fillStyle(0x686868);
-    graphics.lineStyle(1, "#014346", 1 );
-    graphics.fillRect(500, 940, 200, 120);
-    graphics.strokeRect(460, 880, 1000, 400);
+    // Pinta hud dret
+    HudItems.add(new HudItem(scene,1920-150, 200,'turret') ,true)
+    HudItems.add(new HudItem(scene,1920-150, 400,'cannon') ,true)
+    graphics.fillStyle(0xFFFF00);
+    graphics.lineStyle(40, 0xFFD800, 1)
+    graphics.fillRect(1920-300, 0, 290, 1080);
+    graphics.strokeRect(1920-300, 20, 280, 1040);
+    graphics.depth=10;
 
 
-    //arma 2 
+    // Mostra els diners
+    this.moneyText = scene.add.text(1920, 0);
+    moneyText.text = "Money: "+money.value;
+    moneyText.setFont("20px Arial")
+    moneyText.setColor('#ffffff');
 
-    graphics.fillStyle(0x686868);
-    graphics.lineStyle(1, "#014346", 1 );
-    graphics.fillRect(600, 940, 200, 120)
-    console.log(graphics)
-    // arma 3
-        // graphics.fillStyle(0x686868);
-        // graphics.lineStyle(1, "#014346", 1 )
-        // graphics.fillRect(700, 940, 200, 120)
-        
-
-        // // arma 4 
-        // graphics.fillStyle(0x686868);
-        // graphics.lineStyle(1, "#014346", 1 )
-        // graphics.fillRect(800, 940, 200, 120)
-
-
-    // this.add.square(200,200,148,148,0x6666ff); 
+    // Mostra la vida
+    this.healthText = scene.add.text(0, 0);
+    healthText.text = "HP: "+health.value ;
+    healthText.setFont("20px Arial")
+    healthText.setColor('#ffffff');
 
 }
 
@@ -100,6 +87,7 @@ function getEnemy(range) {
     // let firstEnemy = enemies.getFirstAlive()
     // return firstEnemy;
 }
+
 function damageEnemy(enemy, bullet) {  
     // only if both enemy and bullet are alive
     if (enemy.active === true && bullet.active === true) {
@@ -111,6 +99,7 @@ function damageEnemy(enemy, bullet) {
         enemy.receiveDamage(bullet.damage);
     }
 }
+
 function hasEnemy(ronda){
     for(let type in ronda) {
         if(ronda[type]>0){
@@ -126,4 +115,12 @@ function nextEnemy(ronda){
         }
     }
     return 0;
+}
+
+function finishGame(){
+    let scene = game.scene.scenes[0];
+    this.endText = scene.add.text(1920, 0);
+    endText.text = "";
+    endText.setFont("100px Arial")
+    endText.setColor('#ffffff');
 }

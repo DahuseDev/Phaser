@@ -26,6 +26,7 @@ class Enemy extends Phaser.GameObjects.Image{
         if (this.follower.t >= 1)
         {   
             this.die()
+            health.decrease(this.stats.dmg)
         }
 
         if(this.hp<this.stats.hp && this.follower.t<1){

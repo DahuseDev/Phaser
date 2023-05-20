@@ -4,6 +4,7 @@ class HudItem extends Phaser.GameObjects.Image {
     {
         super(scene, x, y,'sprites',type);
         this.start = [x,y]
+        this.depth = 12;
         this.type = type;
         this.setInteractive({ draggable: true })
         scene.input.setDraggable(this)
