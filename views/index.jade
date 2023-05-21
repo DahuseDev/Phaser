@@ -1,3 +1,8 @@
 extends layout
 
 block content
+    div( id="popup" class="popup")
+        div(class="popup-content")
+            h2 Fica el teu nom per a enviar la teva puntuació
+            input(type="text" id="username" placeholder="Introdueix el nom d'usuari") 
+            button(id = "button") Enviar

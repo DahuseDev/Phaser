@@ -6,9 +6,6 @@ class Player{
     constructor(start_money){
         this.money+=start_money;
     }
-    setUsername(){
-        this.username = document.getElementById('username').value; 
-    }   
 
     // S'executa quan un es mata a un enemic, s'afegeix score i diners
     add(quantity){
@@ -27,16 +24,28 @@ class Player{
 
     // S'executa quan un enemic arriba al final del camí
     decrease(quantity){
-        this.healt-=quantity;
+        this.health-=quantity;
     }
 
     // Comprova si el jugador segueix viu
     checkAlive(){
-        return this.health > 0 ? true : false
+        return this.health > 0 ? true : false       
     }
 
     // S'executa quan s'acaba la partida
     save(){
-        fetch(`/guardar?username=${this.username}&score=${this.score}`)
+        this.username = document.getElementById('username').value; 
+        var cap = new Headers();
+        cap.append("Content-Type", "application/json");
+        let peticio = {
+            method: 'POST',
+            headers: cap, 
+            body: JSON.stringify({
+                username: this.username,
+                score: player.score
+            })
+        }
+        fetch(`/guardar`,peticio)
+        document.getElementById('popup').style.display="none"; 
     }
 }

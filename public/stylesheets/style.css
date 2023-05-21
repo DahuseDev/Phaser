@@ -16,3 +16,64 @@ html,body{
   right: 0;
   margin: 0 auto;
 }
+
+.popup{
+  position: absolute;
+  top: 0;
+  left: 0;
+  background-color: rgba(0, 0, 0, 0.3);
+  height: 100%;
+  width: 100%;
+  display: none;
+  align-items: center;
+  justify-content: center;
+}
+
+.popup-content{
+  display: flex;
+  height: 40%;
+  width: 30%;
+  background-color: aliceblue;
+  border: 2px solid black;
+  justify-content: space-evenly;
+  align-items: center;
+  flex-direction: column;
+  padding: 4%;
+  box-sizing: border-box;
+  text-align: center;
+  border-radius: 10px;
+}
+
+#button{
+  background-color: transparent;
+  width: 100px;
+  height: 50px;
+  border: 2px solid black; 
+  border-radius: 10%;
+  cursor: pointer;
+}
+
+
+#scoreBody{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  
+}
+
+#scoreboard{
+  font-family: Courier;
+  font-weight: 900;
+  background-color:white;
+  border:5px solid black;
+  border-collapse: collapse;
+}
+
+#scoreboard thead{
+  background-color: rgb(121, 250, 88);
+}
+
+#scoreboard td,#scoreboard th{
+  padding: 10px;
+  border:5px solid black;
+}

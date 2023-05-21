@@ -1,0 +1,47 @@
+doctype html
+html
+    head
+        title= title
+        link(rel='stylesheet', href='/stylesheets/style.css')
+        script.
+            window.onload=async function(){
+                Date.prototype.formattedDate = function(){
+                    let month =  this.getMonth()+1
+                    return this.getDate() + "-" + month + "-" + this.getFullYear();
+                }
+
+                let jugadors = []
+                await fetch("/mostrarUsers")
+                .then(res => res.json())
+                .then(json=>{
+                    for(let player of json){
+                        let jugador = {
+                            username: player.username,
+                            score: player.score,
+                            date: new Date(player.date),
+                        }
+                        jugadors.push(jugador); 
+                    }
+                    return jugadors;
+                })
+                jugadors.sort((a,b)=>{
+                    let aa = a.score * 1
+                    let bb = b.score * 1
+                    return bb-aa
+                })
+                let scoreboard = document.getElementById('scoreboard')
+                for(let jugador of jugadors){
+                    let row = scoreboard.querySelector("#tbody").insertRow()
+                    row.insertCell().innerHTML=jugador.username;
+                    row.insertCell().innerHTML=jugador.score;
+                    row.insertCell().innerHTML=jugador.date.formattedDate();
+                }
+            }
+    body(id="scoreBody")
+        table(id="scoreboard")
+            thead 
+                tr 
+                    th Username 
+                    th Score 
+                    th Date
+            tbody(id="tbody")

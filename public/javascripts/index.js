@@ -22,6 +22,7 @@ let config = {
 let game = new Phaser.Game(config);
 let player = new Player(START_MONEY); 
 let ronda = 1;
+let rondaActual = generateRound(ronda);
 let focus = new Focus();
 function preload ()
 {
@@ -126,15 +127,14 @@ function create ()
 
 function update(time, delta) {  
     let scene = game.scene.scenes[0];
-    rondaActual = rounds[ronda]
-    moneyText.text = "Diners: "+player.money;
+    moneyText.text = "Diners: "+player.money+"\nPuntuació: "+player.score+"\nRonda: "+ronda;
     // healthText.text = "HP: "+health.value;
     
     // if its time for the next enemy
     if (time > this.nextEnemy && hasEnemy(rondaActual) && player.checkAlive())
     {        
         let type = nextEnemy(rondaActual);
-        rounds[ronda][type]--
+        rondaActual[type]--
         let enemy = new Enemy(scene,type)
         enemies.add(enemy,true);
         
@@ -145,6 +145,7 @@ function update(time, delta) {
     }
     if(!hasEnemy(rondaActual) && enemies.countActive() == 0  && player.checkAlive()){
         ronda++;
+        rondaActual = generateRound(ronda);
         enemies.clear(true,true)
         this.nextEnemy = time + 1000;
     }
@@ -159,87 +160,6 @@ function update(time, delta) {
 
     if(!player.checkAlive()){
         finishGame();
+        game.destroy();
     }
 }
-
-
-
-
-
-// let Turret = new Phaser.Class({
-//     Extends: Phaser.GameObjects.Image,
-//     initialize:
-//     function Turret (scene)
-//     {
-//         Phaser.GameObjects.Image.call(this, scene, 0, 0,'turret');
-//         this.width=108;
-//         this.height=192;
-//         this.nextTic = 0;
-//         console.log(this)
-//     },
-//     // we will place the turret according to the grid
-//     place: function(i, j) {            
-//         this.y = i * 64 + 64/2;
-//         this.x = j * 64 + 64/2;
-//         map[i][j] = 1;            
-//     },
-//     update: function (time, delta)
-//     {   
-//         let enemy = getEnemy(this.x, this.y, 300);
-//         if(enemy){
-//             let angle = Phaser.Math.Angle.Between(this.x, this.y, enemy.x, enemy.y);
-//             this.angle = (angle + Math.PI/2) * Phaser.Math.RAD_TO_DEG;
-//         }
-//         if(time > this.nextTic) {
-//             this.fire(enemy);
-//             this.nextTic = time + 300;
-//         }
-//     },
-//     fire: function(enemy) {
-//         if(enemy) {
-//             addBullet(this.x, this.y, this.angle,enemy);
-            
-//         }
-//     },
-    
-// });
-
-
-
-// let Bullet = new Phaser.Class({
-//     Extends: Phaser.GameObjects.Image,
-//     initialize:
-//     function Bullet (scene)
-//     {
-//         Phaser.GameObjects.Image.call(this, scene, 0, 0, 'bullet');
-//         this.dx = 0;
-//         this.dy = 0;
-//         this.lifespan = 0;
-//         this.speed = Phaser.Math.GetSpeed(600, 1);
-//     },
-//     update: function (time, delta)
-//     {
-//         this.angle = Phaser.Math.Angle.Between(this.x, this.y, this.enemy.x, this.enemy.y);
-//         this.dx = Math.cos(this.angle);
-//         this.dy = Math.sin(this.angle);
-//         this.lifespan -= delta;
-//         this.x += this.dx * (this.speed * delta);
-//         this.y += this.dy * (this.speed * delta);
-//         if (this.lifespan <= 0)
-//         {
-//             this.setActive(false);
-//             this.setVisible(false);
-//         }
-//     },
-//     fire: function (x, y, angle,enemy)
-//     {
-//         this.setActive(true);
-//         this.setVisible(true);
-//         //  Bullets fire from the middle of the screen to the given x/y
-//         this.setPosition(x, y);
-//     //  we don't need to rotate the bullets as they are round
-//         // this.setRotation(angle);
-//         this.lifespan = 300;
-//         this.enemy = enemy
-//     }
-// });

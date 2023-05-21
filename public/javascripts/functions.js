@@ -33,7 +33,7 @@ function generarHud(graphics){
 
 
     // Mostra els diners
-    this.moneyText = scene.add.text(1667, 980);
+    this.moneyText = scene.add.text(1667, 900);
     moneyText.depth=15;
     moneyText.setFont("30px Arial")
     moneyText.setColor('#000000');
@@ -123,27 +123,40 @@ function nextEnemy(ronda){
 
 function finishGame(){
     let scene = game.scene.scenes[0];
-    this.endText = scene.add.text(1920, 0);
+    let endText = scene.add.text(1920, 0);
     endText.text = "";
     endText.setFont("100px Arial")
     endText.setColor('#ffffff');
-
+    document.getElementById("popup").style.display = "flex"; 
+    document.getElementById('button').addEventListener('click',player.save)
 }
 
 function generateRound(ronda){
     let digits = ronda.toString().split('');
+
+    //Ultim digit
     let lastDigit = digits.splice(-1)*1+1;
-    digits = digits.join("") * 1;
+    
+    //Dificultat
+    let dificultat = digits.join("") * 1;
 
     let enemies = {
         'tank':0,
         'tankred':0,
         'tankyellow':0
     };
+
+    // Itera ultim digit
     for(let i = 0 ; i <= lastDigit ; i++ ){
-        enemies['tank']+= 1 * (digits+1);
-        digits >= 1 ? enemies['tankred'] +=1 * Math.floor(digits+1/2): '';
-        digits >= 2 ? enemies['tankyellow'] +=0.5 * Math.floor(digits+1/4): '';
+
+        //Afegeix tank normal
+        enemies['tank']+= 1 * (dificultat+1);
+
+        //Afegeix tank vermell
+        dificultat >= 1 ? enemies['tankred'] +=1 * Math.floor(dificultat+1/2): '';
+
+        //Afegeix tank groc
+        dificultat >= 2 ? enemies['tankyellow'] +=0.5 * Math.floor(dificultat+1/4): '';
     }
     enemies['tankyellow'] = Math.floor(enemies['tankyellow'])
     return enemies;
