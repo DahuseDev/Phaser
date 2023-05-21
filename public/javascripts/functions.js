@@ -129,3 +129,22 @@ function finishGame(){
     endText.setColor('#ffffff');
 
 }
+
+function generateRound(ronda){
+    let digits = ronda.toString().split('');
+    let lastDigit = digits.splice(-1)*1+1;
+    digits = digits.join("") * 1;
+
+    let enemies = {
+        'tank':0,
+        'tankred':0,
+        'tankyellow':0
+    };
+    for(let i = 0 ; i <= lastDigit ; i++ ){
+        enemies['tank']+= 1 * (digits+1);
+        digits >= 1 ? enemies['tankred'] +=1 * Math.floor(digits+1/2): '';
+        digits >= 2 ? enemies['tankyellow'] +=0.5 * Math.floor(digits+1/4): '';
+    }
+    enemies['tankyellow'] = Math.floor(enemies['tankyellow'])
+    return enemies;
+}
