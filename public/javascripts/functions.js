@@ -1,3 +1,5 @@
+
+// Dibuixa una graella que permet veure les caselles on es poden colocar turrets
 function drawGrid(graphics) {
 
     graphics.lineStyle(1, 0x0000ff, 0.8);
@@ -12,21 +14,22 @@ function drawGrid(graphics) {
     graphics.strokePath();
 }
 
+// Retorna les coords d'un esdeveniment
+// function coords(event){
+//     let x = event.clientX; 
+//     let y = event.clientY; 
+// }
 
-function coords(event){
-    let x = event.clientX; 
-    let y = event.clientY; 
-}
-
-
+// Genera el HUD del joc
 function generarHud(graphics){
     let scene = game.scene.scenes[0];
 
     // Pinta hud dret
     HudItems.add(new HudItem(scene,1920-150, 200,'turret') ,true)
     HudItems.add(new HudItem(scene,1920-150, 400,'cannon') ,true)
-    graphics.fillStyle(0xFFFF00);
-    graphics.lineStyle(40, 0xFFD800, 1)
+    HudItems.add(new HudItem(scene,1920-150, 600,'sniper') ,true)
+    graphics.fillStyle(0x00AA00);
+    graphics.lineStyle(40, 0x55DD55, 1)
     graphics.fillRect(1920-300, 0, 290, 1080);
     graphics.strokeRect(1920-300, 20, 280, 1040);
     graphics.depth=10;
@@ -37,22 +40,12 @@ function generarHud(graphics){
     moneyText.depth=15;
     moneyText.setFont("30px Arial")
     moneyText.setColor('#000000');
-
-    // Mostra la vida
-    // this.healthText = scene.add.text(0, 0);
-    // healthText.text = "HP: "+health.value ;
-    // healthText.setFont("20px Arial")
-    // healthText.setColor('#ffffff');
-
 }
 
-
+// Coloca la turret a la posició on s'ha fet drop
 function placeTurret(pointer,type,scene,turrets) {
     let i = Math.floor(pointer.y/30);
     let j = Math.floor(pointer.x/30);
-    console.log(i)
-    console.log(j)
-    console.log(canPlaceTurret(i, j))
     if(canPlaceTurret(i, j)) {
         let turret = new Turret(scene,type);
         if(player.pay(turret.stats.price) == null){
@@ -68,9 +61,13 @@ function placeTurret(pointer,type,scene,turrets) {
         }   
     }
 }
+
+// Comprova si es pot colocar la turret a la posició on s'ha fet drop
 function canPlaceTurret(i, j) {
     return map[i][j] === 0;
 }
+
+// Genera una bala i li estableix un objectiu
 function addBullet(x, y, angle,enemy,range,damage) {
     let bullet = bullets.get();
     if (bullet)
@@ -80,30 +77,34 @@ function addBullet(x, y, angle,enemy,range,damage) {
         bullet.fire(x, y, angle,enemy);
     }
 }
+
+//Retorna el primer enemic que es trobi dintre del range establert
 function getEnemy(range) {
+    // Endreça els enemics per la distancia que porten recorreguda.
     let enemyUnits = enemies.getChildren().sort((a,b)=>b.follower.t-a.follower.t)
     for(let i = 0; i < enemyUnits.length; i++) {
         let enemy = enemyUnits[i]
+        // Si hi ha algun enemic que s'hi trobi dintre del range, el retorna
         if(enemy.active && range.contains(enemy.x,enemy.y)){
             return enemy;
         }
     }
-    // let firstEnemy = enemies.getFirstAlive()
-    // return firstEnemy;
 }
 
+// Treu vida a un enemic
 function damageEnemy(enemy, bullet) {  
-    // only if both enemy and bullet are alive
+    // Si l'enemic i la bala estan actius
     if (enemy.active === true && bullet.active === true) {
-        // we remove the bullet right away
+        // desactivem la bala
         bullet.setActive(false);
         bullet.setVisible(false);    
         
-        // decrease the enemy hp with BULLET_DAMAGE 
+        // Treiem vida al enemic en base al damage que té la bala
         enemy.receiveDamage(bullet.damage);
     }
 }
 
+// Comprova si queda algún enemic per a apareixer en aquesta ronda
 function hasEnemy(ronda){
     for(let type in ronda) {
         if(ronda[type]>0){
@@ -112,6 +113,8 @@ function hasEnemy(ronda){
     }
     return 0;
 }
+
+// Retorna el proper enemic de la ronda
 function nextEnemy(ronda){
     for(let type in ronda) {
         if(ronda[type]>0){
@@ -121,6 +124,7 @@ function nextEnemy(ronda){
     return 0;
 }
 
+// Final del joc
 function finishGame(){
     let scene = game.scene.scenes[0];
     let endText = scene.add.text(1920, 0);
@@ -131,33 +135,42 @@ function finishGame(){
     document.getElementById('button').addEventListener('click',player.save)
 }
 
+// Genera una quantitat d'enemics en base a la ronda en que estem
 function generateRound(ronda){
+    // Numero de la ronda dividit en digits
     let digits = ronda.toString().split('');
 
-    //Ultim digit
+    // Ultim digit
     let lastDigit = digits.splice(-1)*1+1;
     
-    //Dificultat
+    // Dificultat
     let dificultat = digits.join("") * 1;
 
+    // Plantilla d'una ronda
     let enemies = {
         'tank':0,
         'tankred':0,
-        'tankyellow':0
+        'tankyellow':0,
+        'tankblue':0
     };
 
     // Itera ultim digit
     for(let i = 0 ; i <= lastDigit ; i++ ){
 
-        //Afegeix tank normal
-        enemies['tank']+= 1 * (dificultat+1);
+        //Afegeix tank verd
+        enemies['tank']+= 3 * (dificultat*dificultat)+1;
 
         //Afegeix tank vermell
-        dificultat >= 1 ? enemies['tankred'] +=1 * Math.floor(dificultat+1/2): '';
+        dificultat >= 1 ? enemies['tankred'] +=2 * Math.floor(dificultat*dificultat): '';
 
         //Afegeix tank groc
-        dificultat >= 2 ? enemies['tankyellow'] +=0.5 * Math.floor(dificultat+1/4): '';
+        dificultat >= 2 ? enemies['tankyellow'] +=1 * Math.floor(dificultat*dificultat): '';
+
+        //Afegeix tank blau
+        dificultat >= 3 ? enemies['tankblue'] +=0.5 * Math.floor(dificultat*dificultat): '';
     }
+    // Arrodoneix el numero d'enemics per a que no hi hagi decimals
     enemies['tankyellow'] = Math.floor(enemies['tankyellow'])
+    enemies['tankblue'] = Math.floor(enemies['tankblue'])
     return enemies;
 }

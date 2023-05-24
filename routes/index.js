@@ -3,6 +3,7 @@ let router = express.Router();
 let Database = require('./database');
 let db = new Database() 
 /* GET home page. */
+
 router.get('/', function(req, res, next) {
   res.render('index', { title: 'Express' });
 });
