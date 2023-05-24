@@ -142,7 +142,7 @@ let turretStats = {
     },
     'cannon':{
         'reload':1000,
-        'damage':70,
+        'damage':200,
         'range':5,
         'price':700,
         'audio':'cannon'

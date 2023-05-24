@@ -146,6 +146,8 @@ function generateRound(ronda){
     // Dificultat
     let dificultat = digits.join("") * 1;
 
+    ENEMY_SPAWN_COOLDOWN = 1000 / (dificultat+1);
+
     // Plantilla d'una ronda
     let enemies = {
         'tank':0,

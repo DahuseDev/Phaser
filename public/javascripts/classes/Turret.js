@@ -9,6 +9,7 @@ class Turret extends Phaser.GameObjects.Image{
         this.depth = 1;
         this.stats = turretStats[this.turretType];
         this.sound = scene.sound.add(this.stats.audio,{loop:false})
+        this.sound.volume = 0.3; 
     }
     
     // Colocarem la turret a la casella de la graella corresponent
@@ -18,7 +19,6 @@ class Turret extends Phaser.GameObjects.Image{
 
         // Marquem aquesta casella com a ocupada per a que no es pugui ficar mes turrets
         map[i][j] = 2;
-          
 
         // Fem el cercle que mostra el range
         this.circle = new Phaser.Geom.Circle(this.x, this.y, (this.stats.range+1)*30) 

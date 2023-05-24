@@ -1,7 +1,6 @@
 const socket = io();
 socket.on('nou tank',async function(data){
     data = JSON.parse(data);
-    console.log(data.color)
     if(enemyStats[data.color]){
         generaEnemic(data.color)
     }
